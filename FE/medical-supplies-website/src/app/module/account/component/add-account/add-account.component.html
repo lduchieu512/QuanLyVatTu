@@ -1,0 +1,120 @@
+<!----------------------- Main Container -------------------------->
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+  <!----------------------- Login Container -------------------------->
+  <div class="row border rounded-5 p-3 bg-white shadow box-area">
+    <!--------------------------- Left Box ----------------------------->
+    <div class="col-md-6 rounded-4 d-flex justify-content-center align-items-center flex-column left-box"
+         style="background: #00B894;">
+      <div class="featured-image mb-3">
+        <img src="assets/images/addAccount(1).png" class="img-fluid" style="width: 250px;">
+      </div>
+      <p class="text-mute fs-1" style="font-family: 'Courier New', Courier, monospace; font-weight: 600;">Thêm tài
+        khoản</p>
+      <p class="text-white fs-2" style="font-family: 'Courier New', Courier, monospace; font-weight: 600;">nhân viên</p>
+    </div>
+    <!-------------------- ------ Right Box ---------------------------->
+
+    <div class="col-md-6 right-box">
+      <form [formGroup]="accountForm" (ngSubmit)="submitAddAccount">
+        <div class="mb-3">
+          <label for="username" class="form-label fw-bolder">Tài khoản</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-regular fa-user"></i></span>
+            <input formControlName="username" type="text" class="form-control" placeholder="Nhập tài khoản"
+                   id="username"
+                   [ngClass]="accountForm.controls.username?.invalid?'is-invalid':'is-valid'">
+          </div>
+          <div *ngIf="accountForm.get('username').invalid && accountForm.get('username').touched">
+            <p class="text-danger" *ngIf="accountForm.get('username').errors.required">Vui lòng nhập tài khoản</p>
+            <p class="text-danger" *ngIf="accountForm.get('username').errors.pattern">Tài khoản không hợp lệ</p>
+            <p class="text-danger"
+               *ngIf="accountForm.get('username').errors.minlength || accountForm.get('username').errors.maxlength">
+              Tài khoản phải có độ dài từ 4 đến 30 ký tự
+            </p>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="encryptPassword" class="form-label fw-bolder">Mật khẩu</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-key"></i></span>
+            <input formControlName="encryptPassword" type="password" class="form-control"
+                   placeholder="Nhập mật khẩu"
+                   id="encryptPassword"
+                   [ngClass]="accountForm.controls.encryptPassword?.invalid?'is-invalid':'is-valid'">
+          </div>
+          <div *ngIf="accountForm.get('encryptPassword').invalid && accountForm.get('encryptPassword').touched">
+            <p class="text-danger" *ngIf="accountForm.get('encryptPassword').errors.required">Vui lòng nhập mật khẩu</p>
+            <p class="text-danger" *ngIf="accountForm.get('encryptPassword').errors.pattern">Mật khẩu không hợp lệ.
+              Mật khẩu phải có ít nhất 1 ký tự số, 1 ký tự in hoa và 1 ký tự thường.</p>
+            <p class="text-danger"
+               *ngIf="accountForm.get('encryptPassword').errors.minlength || accountForm.get('encryptPassword').errors.maxlength">
+              Mật khẩu phải có độ dài từ 6 đến 32 ký tự
+            </p>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="rePassword" class="form-label fw-bolder">Nhập lại mật khẩu</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-key"></i></span>
+            <input formControlName="rePassword" type="password" class="form-control"
+                   placeholder="Nhập lại mật khẩu"
+                   id="rePassword"
+                   [ngClass]="accountForm.controls.rePassword?.invalid?'is-invalid':'is-valid'">
+          </div>
+          <div *ngIf="accountForm.get('rePassword').invalid && accountForm.get('rePassword').touched">
+            <p class="text-danger" *ngIf="accountForm.get('rePassword').errors.required">Vui lòng nhập lại mật khẩu</p>
+            <p class="text-danger" *ngIf="accountForm.get('rePassword').errors.pattern">Mật khẩu không hợp lệ.
+              Mật khẩu phải có ít nhất 1 ký tự số, 1 ký tự in hoa và 1 ký tự thường.</p>
+            <p class="text-danger"
+               *ngIf="accountForm.get('rePassword').errors.minlength || accountForm.get('rePassword').errors.maxlength">
+              Mật khẩu phải có độ dài từ 6 đến 32 ký tự
+            </p>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="email" class="form-label fw-bolder">Email</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-regular fa-envelope"></i></span>
+            <input formControlName="email" type="text" class="form-control" placeholder="Nhập email" id="email"
+                   [ngClass]="accountForm.controls.email?.invalid?'is-invalid':'is-valid'">
+          </div>
+          <div *ngIf="accountForm.get('email').invalid && accountForm.get('email').touched">
+            <p class="text-danger" *ngIf="accountForm.get('email').errors.required">Vui lòng nhập email</p>
+            <p class="text-danger" *ngIf="accountForm.get('email').errors.pattern">Email không đúng định dạng, vui lòng
+              nhập lại. Ex: tên_email@gmail.com</p>
+            <p class="text-danger"
+               *ngIf="accountForm.get('email').errors.minlength || accountForm.get('email').errors.maxlength">
+              Tên email chỉ được phép chứa từ 6 đến 128 kí tự
+            </p>
+          </div>
+        </div>
+
+        <div class="form-group mb-5">
+          <label for="role" class="form-label fw-bolder">Quyền</label>
+          <div class="input-group"><span class="input-group-text"><i class="fa-solid fa-users"></i></span>
+            <select class="form-control" formControlName="role" id="role" name="role">
+              <option disabled value="">----Chọn quyền----------</option>
+              <option [ngValue]="item" *ngFor="let item of roles">{{item?.roleName}}</option>
+            </select>
+          </div>
+          <div *ngIf="accountForm.get('role').invalid && accountForm.get('role').touched" class="text-danger">
+            Bắt buộc phải chọn quyền
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <button type="button" class="btn btn-success w-100" [disabled]="!accountForm.valid"
+                  (click)="submitAddAccount()">Thêm tài khoản
+          </button>
+        </div>
+
+        <div class="mb-3">
+          <button class="btn btn-secondary w-100" (click)="resetForm()">Hoàn tác</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

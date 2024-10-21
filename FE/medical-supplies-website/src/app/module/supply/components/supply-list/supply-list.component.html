@@ -1,0 +1,46 @@
+<app-supply-search (newItemEvent)="search($event)" (keywordSearch)="receiveKeyword($event)" (totalPageAfterSearch)="receiveTotalPages($event)"></app-supply-search>
+
+<div class="container my-3 infor-table">
+  <div *ngIf="supplies === undefined || supplies?.length === 0">
+    <p>Not found!</p>
+  </div>
+  <div *ngIf="supplies !== undefined && supplies?.length !== 0">
+    <h4>Thông tin vật tư</h4>
+    <div class="scroll-table table-bordered">
+      <table class="table" id="new-material">
+        <thead id="navbar-sticky">
+        <tr>
+          <th style="width: 8%">Mã vật tư</th>
+          <th style="width: 26%">Tên vật tư</th>
+          <th style="width: 10%">Loại vật tư</th>
+          <th style="width: 12%">Giá thành (VND)</th>
+          <th style="width: 12%">Hạn sử dụng</th>
+          <th style="width: 20%">Nhà cung cấp</th>
+          <th style="width: 12%"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let supply of supplies">
+          <td>{{supply.product_Code}}</td>
+          <td>{{supply.product_Name}}</td>
+          <td>{{supply.category_Name}}</td>
+          <td>{{supply.product_Price | currency: 'VND'}}</td>
+          <td>{{supply.expire_Date | date: 'dd-MM-yyyy'}}</td>
+          <td>{{supply.name}}</td>
+          <td>
+            <button class="btn btn-warning" [routerLink]="['/products/update/',supply.product_Code]">
+              <i class="fa fa-pencil-square-o"></i> Chỉnh sửa
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination">
+      <a *ngIf="page !== 1" (click)="previousPage()" class="text1">«</a>
+      <a class="paginationItem" [class.active]="page===currentPage" (click)="accessPage(page + 1)"
+         *ngFor="let page of totalPages">{{page + 1}}</a>
+      <a *ngIf="page < totalPage" (click)="nextPage()" class="text1">»</a>
+    </div>
+  </div>
+</div>

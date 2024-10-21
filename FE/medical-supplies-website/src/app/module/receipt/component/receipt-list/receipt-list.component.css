@@ -1,0 +1,55 @@
+.form-label {
+  font-weight: bold;
+}
+body {
+  max-width: 75%; padding: 50px; margin: auto
+}
+.validate-form {
+  color: red;
+}
+h3 {
+  text-align: center;
+  color: #00b894  ;
+}
+.table th{
+  position: sticky;
+  top: -1px;
+  background: white;
+  z-index: 1;
+  text-align: center;
+}
+td {
+  text-align: center;
+}
+.obligatory{
+  color: red;
+  font-size: 20px;
+}
+.invoice {
+  padding: 10px;
+  max-width: 600px;
+  margin: auto;
+}
+
+.section {
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.item-list {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.item-list th, .item-list td {
+  border: 1px solid #000;
+  padding: 8px;
+}
+
+.item-list th {
+  background-color: #f2f2f2;
+}

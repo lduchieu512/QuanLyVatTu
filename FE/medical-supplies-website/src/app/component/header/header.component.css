@@ -1,0 +1,111 @@
+nav {
+  position: sticky;
+  top: 0px;
+  background: #00b894;
+  z-index: 100;
+  width: 100%;
+}
+
+.navbar {
+  background: #00b894;
+}
+
+.nav-link {
+  color: #f0f0f0;
+}
+
+.navbar-nav .nav-link.active {
+  color: #f0f0f0;
+  font-size: 110%;
+}
+
+.nav-link.disabled {
+  color: #f0f0f0;
+  font-size: 110%;
+}
+
+.navbar-nav .nav-link.dropdown-toggle {
+  font-size: 110%;
+}
+
+
+/*user*/
+.user-profile {
+  text-align: center;
+  position: relative;
+}
+
+.user-profile__avatar-container {
+  display: inline-block;
+  position: relative;
+}
+
+.user-profile__name {
+  color: #f0f0f0;
+}
+
+.user-profile__avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-profile__options {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  padding: 10px;
+  border-radius: 4px;
+  z-index: 1;
+}
+
+.user-profile__avatar-container:hover .user-profile__options {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.user-profile__option {
+  display: block;
+  width: 100%;
+  padding: 10px 0;
+  text-align: center;
+  color: #333;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.user-profile__option:hover {
+  background-color: #00b894;
+}
+
+/*Giỏ hàng*/
+.cart {
+  position: relative;
+}
+
+.cart-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.cart-item-count {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background-color: #f44336;
+  color: #fff;
+  font-size: 12px;
+  border-radius: 50%;
+  padding: 2px 6px;
+}
+
+.border-green-blue {
+  border-color: #55efc4 !important;
+}

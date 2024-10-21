@@ -1,0 +1,167 @@
+<div class="container" >
+  <div class="row justify-content-center mt-4" >
+    <h2 style="text-align: center; margin-top: 10px">Chỉnh Sửa Khách Hàng</h2>
+    <div class="col-lg-12">
+
+      <div class="form-group col-md-12 avatar" style="background-color: #00B894">
+        <img style="width: 200px; height: 200px; border-radius: 50%;" src="{{imgSrc}}">
+      </div>
+
+      <form class="row"[formGroup]="customerFormEdit" (ngSubmit)="editCustomer(id)" *ngIf="customerFormEdit">
+        <input hidden type="text" class="form-control me-2" placeholder="Id" formControlName="customerId" readonly>
+        <div class="form-group col-md-6" style="margin-top: 10px">
+          <label class="form-label">Mã khách hàng</label><span style="color: red">*</span>
+          <input type="text" class="form-control" placeholder="Mã khách hàng" formControlName="customerCode" readonly>
+          <span class="mess" style="color: red">
+             <small class="text-danger mb-0 pb-0"
+                    *ngIf="customerFormEdit.controls.customerCode.hasError('pattern') &&customerFormEdit.controls.customerCode.dirty">
+               Mã khách hàng chưa đúng định dạng.</small>
+             <small class="text-danger mb-0 pb-0" *ngIf="customerFormEdit.controls.customerCode.hasError('required')&&customerFormEdit.controls.customerCode.dirty">
+              Vui lòng nhập mã khách hàng.</small>
+
+          </span>
+        </div>
+
+
+        <div class="form-group col-md-6">
+          <label class="form-label" for="avatar" class="form-label">Hình đại diện</label><span style="color: red">*</span>
+          <input type="file" class="form-control" id="avatar" name="avatar" accept=".jpg,.jpeg,.png,/image/*"  (change)="selectImg($event)" >
+          <span class="mess" style="color: red">
+
+             <small class="text-danger mb-0 pb-0" *ngIf="customerFormEdit.controls.customerImg.hasError('required')&&customerFormEdit.controls.customerImg.dirty">
+             Vui lòng chọn ảnh đại diện.</small>
+          </span>
+        </div>
+
+
+        <div class="form-group col-md-6" style="margin-top: 10px">
+          <label class="form-label" for="hoTen">Họ và tên</label><span style="color: red">*</span>
+          <input type="text" class="form-control" id="hoTen" placeholder="Họ và tên" formControlName="name">
+          <span class="mess" style="color: red">
+            <small class="text-danger mb-0 pb-0" *ngIf="customerFormEdit.controls.name.hasError('required')&&customerFormEdit.controls.name.dirty">
+              Vui lòng nhập họ và tên.</small>
+             <small class="text-danger mb-0 pb-0" *ngIf="customerFormEdit.controls.name.hasError('minlength')&&customerFormEdit.controls.name.dirty">
+               Chứa ít nhất 5 kí tự.</small>
+              <small class="text-danger mb-0 pb-0" *ngIf="customerFormEdit.controls.name.hasError('maxlength')&&customerFormEdit.controls.name.dirty">
+                Chứa tối đa 50 kí tự.</small>
+             <small class="text-danger mb-0 pb-0"
+                    *ngIf="customerFormEdit.controls.name.hasError('pattern')
+            &&customerFormEdit.controls.name.dirty&&!customerFormEdit.controls.name.hasError('minlength')
+            &&!customerFormEdit.controls.name.hasError('maxlength')">Họ và tên chưa đúng định dạng.</small>
+          </span>
+        </div>
+
+        <div class="form-group col-md-6" style="margin-top: 10px">
+          <label class="form-label" for="ngaySinh">Ngày sinh</label><span style="color: red">*</span>
+          <input type="date" class="form-control" id="ngaySinh" placeholder="Nhập ngày sinh" formControlName="dateOfBirth">
+          <span class="mess" style="color: red">
+
+           <small class="text-danger mb-0 pb-0"
+                  *ngIf="customerFormEdit.get('dateOfBirth').invalid && (customerFormEdit.get('dateOfBirth').touched||customerFormEdit.get('dateOfBirth').dirty)">
+             Vui lòng nhập Ngày sinh.
+            </small>
+          </span>
+        </div>
+
+        <div class="form-group col-md-6">
+          <label class="form-label" for="email">Email</label><span style="color: red">*</span>
+          <input type="email" class="form-control" id="email" placeholder="Nhập Email" formControlName="email">
+          <span class="mess" style="color: red">
+            <small class="text-danger mb-0 pb-0" *ngIf="customerFormEdit.controls.email.hasError('required')&&customerFormEdit.controls.email.dirty">
+              Vui lòng nhập email.</small>
+            <small class="text-danger mb-0 pb-0" *ngIf="customerFormEdit.controls.email.hasError('minlength')&&customerFormEdit.controls.email.dirty">
+              Chứa ít nhất 5 kí tự.</small>
+            <small class="text-danger mb-0 pb-0" *ngIf="customerFormEdit.controls.email.hasError('maxlength')&&customerFormEdit.controls.email.dirty">
+              Chứa tối đa 30 kí tự.</small>
+            <small class="text-danger mb-0 pb-0"
+                   *ngIf="customerFormEdit.controls.email.hasError('pattern')
+              &&customerFormEdit.controls.email.dirty&&!customerFormEdit.controls.email.hasError('minlength')
+              &&!customerFormEdit.controls.email.hasError('maxlength')">Email chưa đúng định dạng.</small>
+          </span>
+        </div>
+
+
+
+        <div class="form-group col-md-6">
+          <label class="form-label" for="gioiTinh" id="gioiTinh">Giới tính</label><span style="color: red">*</span><br>
+
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="gender" id="gioiTinhNam" [value]="true"  checked formControlName="gender">
+            <label class="form-check-label" for="gioiTinhNam">Nam</label>
+          </div>
+
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="gender" id="gioiTinhNu" [value]="false"  formControlName="gender" >
+            <label class="form-check-label" for="gioiTinhNu">Nữ</label>
+          </div>
+        </div>
+
+
+
+
+        <div class="form-group col-md-6">
+          <label class="form-label" for="sdt">Số điện thoại</label><span style="color: red">*</span>
+          <input type="tel" class="form-control" id="sdt" placeholder="Số điện thoại" formControlName="phone">
+          <span class="mess" class="mess" style="color: red">
+
+             <small class="text-danger mb-0 pb-0" *ngIf="customerFormEdit.controls.phone.hasError('required')&&customerFormEdit.controls.phone.dirty">
+            Vui lòng nhập số điện thoại.</small>
+             <small class="text-danger mb-0 pb-0" *ngIf="customerFormEdit.controls.phone.hasError('pattern')&&customerFormEdit.controls.phone.dirty">
+            Chỉ được phép chứa 10 số và 3 chữ số đúng nhà mạng Việt Nam.</small>
+          </span>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="loaikhach" class="form-label" class="form-label">Loại khách hàng</label><span style="color: red">*</span>
+          <select id="loaikhach" class="form-select" formControlName="customerType">
+            <option selected disabled value="">Chọn loại khách hàng</option>
+            <!--            <option *ngFor="let customerType of customerTypes" [value]="customerType.customerTypeId">-->
+            <option *ngFor="let customerType of customerTypes" value="{{customerType.customerTypeId}}">
+              {{customerType.customerTypeName}}
+          </select>
+          <span class="mess" class="mess" style="color: red">
+           <small class="text-danger mb-0 pb-0" *ngIf="customerFormEdit.controls.customerType.hasError('required')&&customerFormEdit.controls.customerType.dirty">
+             Vui lòng nhập loại khách hàng.</small>
+          </span>
+        </div>
+
+        <div class="form-group col-md-6">
+          <label class="form-label" for="cmnd">Căn cước công dân</label><span style="color: red">*</span>
+          <input type="text" class="form-control" id="cmnd" placeholder="Nhập căn cước công dân" formControlName="idCard">
+          <span class="mess" style="color: red">
+
+             <small class="text-danger mb-0 pb-0" *ngIf="customerFormEdit.controls.idCard.hasError('required')&&customerFormEdit.controls.idCard.dirty">
+            Vui lòng nhập căn cước công dân.</small>
+             <small class="text-danger mb-0 pb-0" *ngIf="customerFormEdit.controls.idCard.hasError('pattern')&&customerFormEdit.controls.idCard.dirty">
+            Chỉ được phép chứa 12 số.</small>
+          </span>
+        </div>
+
+
+
+        <div class="form-group col-md-6">
+          <label class="form-label" for="diaChi">Địa chỉ</label><span style="color: red">*</span>
+          <input type="text" class="form-control" id="diaChi" placeholder="Nhập địa chỉ" formControlName="customerAddress">
+          <span class="mess" style="color: red">
+            <small class="text-danger mb-0 pb-0" *ngIf="customerFormEdit.controls.customerAddress.hasError('minLength')&&customerFormEdit.controls.customerAddress.dirty">
+            Chứa tối đa 10 kí tự.</small>
+             <small class="text-danger mb-0 pb-0" *ngIf="customerFormEdit.controls.customerAddress.hasError('maxlength')&&customerFormEdit.controls.customerAddress.dirty">
+            Chứa tối đa 100 kí tự.</small>
+            <small class="text-danger mb-0 pb-0" *ngIf="customerFormEdit.controls.customerAddress.hasError('required')&&customerFormEdit.controls.customerAddress.dirty">
+             Vui lòng nhập địa chỉ </small>
+            <small class="text-danger mb-0 pb-0" *ngIf="customerFormEdit.controls.customerAddress.hasError('pattern')&&customerFormEdit.controls.customerAddress.dirty">
+             Vui lòng không nhập các kí tự đặc biệt </small>
+          </span>
+        </div>
+
+        <div class="form-group col-md-12" style="text-align: center;margin-top: 30px;margin-bottom: 10px;">
+          <button type="reset" class="btn btn-outline-danger mx-5" routerLink="/customers">Hủy</button>
+
+          <button type="submit"  class="btn btn-outline-success mx-4" >
+            Lưu
+          </button>
+
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

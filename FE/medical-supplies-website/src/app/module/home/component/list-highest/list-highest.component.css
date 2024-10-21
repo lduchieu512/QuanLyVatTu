@@ -1,0 +1,89 @@
+*:not(i) {
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+}
+
+html {
+  background-color: #ecf0f1;
+}
+
+body {
+  min-height: 1000px;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+ul,
+li {
+  list-style-type: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+
+.form__filter {
+  width: 40%;
+  justify-content: flex-end;
+}
+
+.sidebar__left,
+.sidebar__right {
+  background-color: #ecf0f1;
+}
+
+.sidebar__right {
+  padding: 0;
+  padding-right: 12px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  height: 400px;
+}
+
+.sidebar__right::-webkit-scrollbar {
+  display: none;
+}
+
+
+.filter {
+  padding-top: 12px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.select__price {
+  padding: 12px 12px;
+  border: 1px solid #00b894;
+  /*color: #00b894;*/
+  border-radius: 2px;
+  outline: none;
+}
+
+.my__card {
+  border-radius: 2px;
+  box-shadow: 1px 1px 8px rgba(122, 119, 119, 0.35);
+}
+
+.my__card__body {
+  padding: 4px 8px;
+  background-color: #ecf0f1;
+}
+
+
+
+
+
+
+
+
+
+
+
+

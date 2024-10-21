@@ -1,0 +1,13 @@
+<div class="my__card w-100" style="border: none;"
+     *ngFor="let product of highestProductPriceList;let i = index">
+  <div class="my__card__body">
+    <p class="d-flex justify-content-between">
+      <span><i class="fa-solid fa-crown text-warning"></i>{{productCounter + i + 1}}</span>
+      <span class="text-dark" style="font-size: 20px;">{{product.product_Price|currency:'VND'}}</span>
+    </p>
+  </div>
+  <img src="{{product.product_Img}}" alt="Image" height="120px" class="d-block w-100" alt="">
+</div>
+
+
+

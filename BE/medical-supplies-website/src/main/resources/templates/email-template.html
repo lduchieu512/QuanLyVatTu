@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <title>Thư xác nhận đơn hàng</title>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        .table {
+            vertical-align: middle;
+            border:solid black 1px;
+            border-radius:6px;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        p {
+            font-size: 16px;
+            color: #555;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+
+        .image {
+            text-align: center;
+        }
+
+        .image img {
+            width: 200px;
+            height: auto;
+        }
+
+        td, th {
+            border-left:solid black 1px;
+            border-top:solid black 1px;
+            text-align: center;
+        }
+
+        .my-btn-3 {
+            background-image: linear-gradient(#00b894, #3F6D64FF);
+            color: #fff;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            /*box-shadow: 0px 0px 10px #aaa;*/
+            width: 200px !important;
+            margin: 0 180px;
+            text-decoration: none;
+            text-align: center;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<div class="image">
+    <img src="https://firebasestorage.googleapis.com/v0/b/employee-avatar.appspot.com/o/logo.png?alt=media&token=a3aed4ff-5982-489c-aacf-06c4bc8b39ef" alt="logo">
+</div>
+<h1 style="margin-top: 0px !important;"><b>THƯ XÁC NHẬN ĐƠN HÀNG</b></h1>
+<div class="container">
+    <b><p style="color: #00b894">Cảm ơn quý khách đã sử dụng dịch vụ</p>
+        <p><span style="color: #00b894">A07MEDICAL </span> xin thông báo quý khách vừa có 01 đơn hàng được đặt thành công
+        </p></b>
+    <div style="margin: 0 40px">
+        <p>Họ và tên: <span style="font-weight: bold" th:text="${receiverName}"></span></p>
+        <p>Địa chỉ nhận hàng: <span style="font-weight: bold" th:text="${receiverAddress}"></span></p>
+        <p>Đơn hàng của quý khách đã được tiếp nhận và đang được xử lý.</p>
+        <p>Thông tin chi tiết đơn hàng như sau:</p>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">STT</th>
+                <th scope="col">Tên sản phẩm</th>
+                <th scope="col">Số lượng</th>
+                <th scope="col">Đơn giá</th>
+                <th scope="col">Thành tiền</th>
+            </tr>
+            </thead>
+            <tr th:each="detail, stat : ${cartDetails}">
+                <th th:text="${stat.count}" scope="row"></th>
+                <td th:text="${detail.getProduct().getProductName()}"></td>
+                <td th:text="${detail.getQuantity()}"></td>
+                <td th:text="${#numbers.formatInteger(detail.getProduct().getProductPrice(),0,'POINT')} + ' đ'"></td>
+                <td th:text="${#numbers.formatInteger(detail.getProduct().getProductPrice()*detail.getQuantity(),0,'POINT')} + ' đ'"></td>
+            </tr>
+            <tr>
+                <th colspan="4">Tổng giá trị đơn hàng</th>
+                <th style="text-align: right" th:text="${totalAmount}"></th>
+            </tr>
+        </table>
+        <p>Xin cảm ơn quý khách đã tin tưởng mua hàng tại công ty chúng tôi.</p>
+        <div style="margin-left: 250px" class="d-flex flex-column ">
+            <a style="color: white" href="http://localhost:4200" class="my-btn-3">Quay lại trong chủ</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

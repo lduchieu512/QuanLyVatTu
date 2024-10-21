@@ -1,0 +1,266 @@
+<div style="max-width: 80%; padding: 50px; margin: auto">
+  <div class="main">
+    <div class="title">
+      <h2 style="color: #00b894">Quản Lý Trả - Hủy Hàng</h2>
+    </div>
+    <form [formGroup]="shipmentForm">
+      <div class="staff">
+        <label>Nhân Viên:
+          <span> {{employees?.employeeName}}</span>
+        </label>
+        <label>Ngày làm Việc:
+          <span>{{ day }}/{{ month }}/{{year}}</span>
+        </label>
+      </div>
+
+      <div class="staff">
+        <label>Hình thức:
+          <select class="id_ncc" formControlName="shipmentTypeId" style="margin-left: 27px">
+            <option value="2">Hủy hàng</option>
+            <option value="3">Trả về nhà cung cấp</option>
+          </select>
+        </label>
+      </div>
+      <p class="text-danger" style="text-align: center"*ngIf="shipmentForm.controls.shipmentTypeId?.touched &&
+  shipmentForm.controls.shipmentTypeId?.errors?.required">Vui lòng chọn hình thức</p>
+      <div class="user_id">
+        <label style="display: flex;align-items: center;justify-content: center;">Mã hóa đơn: <span style="color: red">*</span>
+          <input #invoiceCode type="text" style="padding: 5px;border: 1px solid #ccc;border-radius: 5px; margin-left: 10px"
+                 formControlName="invoiceCode"  >
+        </label>
+        <p class="text-danger" style="text-align: center"*ngIf="shipmentForm.controls.invoiceCode?.touched &&
+  shipmentForm.controls.invoiceCode?.errors?.required">Mã hóa đơn không được để trống</p>
+        <p class="text-danger" style="text-align: center"*ngIf="shipmentForm.controls.invoiceCode?.touched &&
+  shipmentForm.controls.invoiceCode?.errors?.pattern">Mã hóa đơn không đúng định dạng HD-xxx</p>
+      </div>
+
+      <div class="user">
+        <div class="user_title">
+          <h5><i class="fa-sharp fa-solid fa-building"></i> Nhà cung cấp</h5>
+        </div>
+        <div class="user_content">
+          <div class="user_id">
+            <label>Mã NCC:
+              <input type="text" disabled [value]="customerDto?.customer_Id" formControlName="customerId">
+            </label>
+            <label>Địa chỉ:
+              <input type="text" disabled style="margin-left: 14px;" placeholder="{{customerDto?.customer_Address}}">
+            </label>
+          </div>
+          <div class="user_name" >
+            <label >Tên NCC:
+              <input type="text" disabled style="margin-left: 58px" placeholder="{{customerDto?.name}}">
+            </label>
+            <label >Số điện thoại: <span style="color: red">*</span>
+              <input type="text"  style="margin-left: 15px"  id="phone-number" (input)="onPhoneInputChange()" placeholder="Nhập số điện thoại" formControlName="phone">
+            </label>
+            <p class="text-danger" style="text-align: center"*ngIf="shipmentForm.controls.phone?.touched &&
+  shipmentForm.controls.phone?.errors?.required">Số điện thoại không được để trống</p>
+            <p class="text-danger" style="text-align: center"*ngIf="shipmentForm.controls.phone?.touched &&
+  shipmentForm.controls.phone?.errors?.pattern">Số điện thoại không đúng định dạng</p>
+            <p *ngIf="notFound" class="text-danger" style="text-align: center">Chưa có nhà cung cấp này </p>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <br>
+  <div class="list">
+    <div class="list_title">
+      <h5><i class="fa-solid fa-syringe"></i> Vật tư</h5>
+    </div>
+    <h3 style="text-align: center; color: #00b894">Danh sách vật tư</h3>
+    <div class="table-responsive" style="max-height: 200px;">
+      <table class="table sticky-table" border="1">
+        <thead>
+        <tr>
+          <th scope="col" style="background: #00b894; color: white; text-align: left">Mã vật tư</th>
+          <th scope="col" style="background: #00b894; color: white; text-align: left">Tên vật tư</th>
+          <th scope="col"  style="background: #00b894; color: white; text-align: center">Số lượng</th>
+          <th scope="col" style="background: #00b894; color: white; ">Đơn giá (VNĐ)</th>
+          <th scope="col" style="background: #00b894; color: white; text-align: center">Tiền nhận lại (VNĐ)</th>
+          <th scope="col" style="background: #00b894; color: white; text-align: left">Lí do</th>
+          <th scope="col" style="background: #00b894; color: white"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let d of shipmentDetailDtos" >
+          <td>{{d.productId}}</td>
+          <td>{{d.productName}}</td>
+          <td style="text-align: center" >{{d.quantity}}</td>
+          <td style="text-align: center">{{d.productPrice | currency: "đ"}}</td>
+          <td style="text-align: center">{{d.productPrice*d.quantity | currency: "đ"}}</td>
+          <td>{{d.note}}</td>
+          <td> <button type="button" class="btn btn-danger " data-bs-toggle="modal" data-bs-target="#modelDelete"
+                       (click)="getShipmentDetailDto(d.productId)">
+            <i class="fa-solid fa-trash"></i>
+          </button></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <h6>Tổng tiền: {{calculateTotalPrice() | currency: "đ"}} </h6>
+  </div>
+  <br>
+  <a type="button" class="btn" (click)="saveTempShipmentDto()" routerLink="create" style="float: right;background: #00b894; color: white">
+    <i class="fa-solid fa-pen-to-square" ></i> Thêm vật tư
+  </a>
+  <br>
+  <br>
+  <div class="d-flex justify-content-center gap-2">
+    <button   class="btn" (click)="saveInvoice()" style="background: #00b894; color: white"><i class="fa-solid fa-pen-to-square"></i> Lưu </button>
+    <button (click)="selectInvoiceCode(invoiceCode.value)" class="btn" style="background: #00b894; color: white" data-bs-toggle="modal" data-bs-target="#modelInvoice" [disabled]="!isSaved"><i class="fa-solid fa-print"></i> In hóa đơn</button>
+    <a type="button" class="btn" style="background: #00b894; color: white" routerLink=""><i class="fa-solid fa-person-walking-arrow-loop-left" ></i> Trở về</a>
+  </div>
+</div>
+
+
+<!-- Modal delete-->
+<div class="modal fade" id="modelDelete" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modelTitleId" style="color: red">Bạn có muốn xóa vật tư này không?</h4>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table>
+          <tr>
+            <td>Mã vật tư: {{shipmentDetail?.productId}}</td>
+          </tr>
+          <tr>
+            <td>Tên vật tư: {{shipmentDetail?.productName}}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Không</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"(click)="removeShipmentDetailDto()">Có</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Modal invoice-->
+<!--<div  class="modal fade" id="modelInvoice" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">-->
+<!--  <div class="modal-dialog" role="document">-->
+<!--    <div class="modal-content">-->
+<!--      <div class="modal-header">-->
+<!--        <h4 class="modal-title" id="modelTitleId1">Kiểm tra hóa đơn</h4>-->
+<!--        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">-->
+<!--          <span aria-hidden="true">&times;</span>-->
+<!--        </button>-->
+<!--      </div>-->
+<!--      <div class="modal-body"  #htmlContent>-->
+<!--        <div class="invoice" >-->
+<!--          <div class="section">-->
+<!--            <h3 style="text-align: center;">Hóa đơn hủy - trả hàng</h3>-->
+<!--            <p><strong>Mã hóa đơn:</strong> {{shipment?.invoiceCode}}</p>-->
+<!--            <p><strong>Nhân viên:</strong> {{shipment?.employee.employeeName}}</p>-->
+<!--            <p><strong>Ngày làm việc:</strong> {{ day }}/{{ month }}/{{year}}</p>-->
+<!--            <p><strong>Hình thức:</strong> {{shipment?.shipmentType.shipmentTypeName}}</p>-->
+<!--            <p><strong>Nhà cung cấp:</strong> {{shipment?.customer.name}}</p>-->
+<!--            <p><strong>Số điện thoại:</strong>{{shipment?.customer.phone}}</p>-->
+<!--          </div>-->
+<!--          <div class="section">-->
+<!--            <span class="section-title" style="display: flex; justify-content: center;">Danh sách vật tư:</span>-->
+<!--            <table class="item-list" border="1">-->
+<!--              <tr>-->
+<!--                <th>Mã vật tư</th>-->
+<!--                <th>Tên vật tư</th>-->
+<!--                <th>Số lượng</th>-->
+<!--                <th>Giá thành</th>-->
+<!--                <th>Ghi chú</th>-->
+<!--              </tr>-->
+<!--              <tr  *ngFor="let s of shipmentDetailDto">-->
+<!--                <th>{{s.productId}}</th>-->
+<!--                <th>{{s.productName}}</th>-->
+<!--                <th>{{s.quantity}}</th>-->
+<!--                <th>{{s.productPrice}}</th>-->
+<!--                <th>{{s.note}}</th>-->
+<!--              </tr>-->
+<!--            </table>-->
+<!--          </div>-->
+<!--          <h6>Tổng tiền: {{calculateTotalPrice()}} VNĐ</h6>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="modal-footer">-->
+<!--        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Không</button>-->
+<!--        <button (click)="printPDF()" class="btn btn-primary" data-bs-dismiss="modal">In hóa đơn</button>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
+<div class="modal fade" data-bs-config={backdrop:true} id="modelInvoice" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="  width: 950px">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modelTitleId1">Thông báo</h4>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div #htmlContent class="modal-body" >
+        <div class="invoice">
+          <div class="section">
+            <h3 style="text-align: center;color: red">Hóa đơn hủy - trả hàng</h3>
+            <p style="text-align: center"><strong>Mã hóa đơn:</strong> {{shipment?.invoiceCode}}</p>
+            <p style="text-align: center"><strong>Nhân viên:</strong> {{shipment?.employee.employeeName}}</p>
+            <p style="text-align: center"><strong>Ngày làm việc:</strong> {{ day }}/{{ month }}/{{year}}</p>
+            <p style="text-align: center"><strong>Hình thức:</strong> {{shipment?.shipmentType.shipmentTypeName}}</p>
+            <p style="text-align: center"><strong>Nhà cung cấp:</strong> {{shipment?.customer.name}}</p>
+            <p style="text-align: center"><strong>Số điện thoại:</strong> {{shipment?.customer.phone}}</p>
+          </div>
+          <br>
+          <div class="section">
+            <h3 class="section-title" style="text-align: center">Danh sách vật tư:</h3>
+            <table class=" item_invoice"  border="1" style="width: 100%">
+              <tr>
+                <th style="width: 10%">Mã vật tư</th>
+                <th style="width: 35%">Tên vật tư</th>
+                <th style="width: 10%">Số lượng</th>
+                <th style="width: 15%">Giá thành (VNĐ)</th>
+                <th style="width: 30%">Ghi chú</th>
+              </tr>
+              <tr  *ngFor="let s of shipmentDetailDtos">
+                <td style=" width: 10%; text-align: center">{{s.productId}}</td>
+                <td style="width: 35%">{{s.productName}}</td>
+                <td style=" width: 10%; text-align: center">{{s.quantity}}</td>
+                <td style="width: 15%; text-align: center">{{s.productPrice | currency: "đ"}}</td>
+                <th style="width: 30%">{{s.note}}</th>
+              </tr>
+              <tr>
+                <td colspan="3">Tổng tiền: {{calculateTotalPrice() | currency: "đ"}} </td>
+              </tr>
+            </table>
+          </div>
+          <br>
+          <div style="display: flex; justify-content: space-between; height: 300px">
+            <!-- Signature field for employee -->
+            <div style="text-align: center;">
+              <span style="margin-left: 76px;">Kế toán bán hàng</span><br>
+            </div>
+            <!-- Signature field for customer -->
+            <div >
+              <span style="margin-right: 76px;">Chữ Kí Nhà cung cấp</span>
+            </div>
+          </div>
+          <hr>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Không</button>
+        <button (click)="printPDF()" type="button" class="btn btn-primary" data-bs-dismiss="modal">In hóa đơn</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

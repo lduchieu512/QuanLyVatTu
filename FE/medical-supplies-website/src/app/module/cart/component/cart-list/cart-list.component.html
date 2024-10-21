@@ -1,0 +1,149 @@
+<div *ngIf="details" class="row">
+  <div class="col-md-1 text-center">
+  </div>
+  <div class="container col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h2 class="text-center" style="padding: 10px">
+          <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+          Giỏ hàng
+        </h2>
+      </div>
+    </div>
+    <div *ngFor="let detail of details" class="card" style="margin: auto">
+      <div *ngIf="detail.quantity>0" class="card-body row">
+        <div class="col-md-2 text-center d-flex justify-content-between">
+          <input type="checkbox" [(ngModel)]="detail.status" (change)="getTotalAmount()"/>
+          <img [src]=detail.product.productImg alt="{{detail.product.productName}}">
+        </div>
+        <div class="col-md-7" style="display: inline">
+          <h5 class="card-title">{{detail.product.productName}}</h5>
+          <i class="card-text">{{detail.product.productInfo.infoIntroduction|slice:0:100}}</i>
+        </div>
+        <div class="col-md-3 text-center"
+             style="gap: 10px; display: flex; flex-direction: column; justify-content: center">
+          <div class="d-flex justify-content-evenly align-items-center">
+            <i *ngIf="detail.quantity === 1" class="fa fa-trash-o" aria-hidden="true"
+               (click)="decreaseQuantity(detail.cartDetailId)"></i>
+            <i *ngIf="detail.quantity > 1" class="fa fa-minus" aria-hidden="true"
+               (click)="decreaseQuantity(detail.cartDetailId)"></i>
+            <span>{{detail.quantity}}</span>
+            <i *ngIf="detail.quantity < detail.product.productQuantity" class="fa fa-plus" aria-hidden="true"
+               (click)="increaseQuantity(detail.cartDetailId)"></i>
+            <i *ngIf="detail.quantity>=detail.product.productQuantity" class="fa fa-ban" aria-hidden="true"></i>
+          </div>
+          <p>{{detail.product.productPrice | currency: 'VND'}}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body row">
+        <div>
+          <button *ngIf="!allChecked && details.length > 0" class="btn btn-outline-success text-center" style="width: inherit"
+                  (click)="checkAll()">Chọn tất cả
+          </button>
+          <button *ngIf="allChecked && details.length > 0" class="btn btn-outline-success text-center" style="width: inherit"
+                  (click)="uncheckAll()">Bỏ chọn tất cả
+          </button>
+          <p *ngIf="details.length == 0" class="text-center">Giỏ hàng hiện đang trống</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card mx-auto">
+      <div class="card-header">
+        <h5 class="text-center">
+          <i class="fa fa-info" aria-hidden="true"></i>
+          Thông tin đơn hàng
+        </h5>
+      </div>
+      <div class="card-body">
+        <table>
+          <tr>
+            <th>Tổng giá trị đơn hàng:</th>
+            <td>{{total|currency: 'VND'}}</td>
+          </tr>
+          <!--          <tr>-->
+          <!--            <th>Mã giảm giá:</th>-->
+          <!--            <td><input type="text" value="0X0001"></td>-->
+          <!--          </tr>-->
+          <!--          <tr>-->
+          <!--            <th>Phí vận chuyển:</th>-->
+          <!--            <td>{{shippingFee|currency:'VND'}}</td>-->
+          <!--          </tr>-->
+          <!--          <tr>-->
+          <!--            <th>Thành tiền:</th>-->
+          <!--            <td>{{total + shippingFee|currency:'VND'}}</td>-->
+          <!--          </tr>-->
+        </table>
+      </div>
+    </div>
+    <br/>
+    <div class="card mx-auto">
+      <div class="card-header text-center">
+        <h5 class="text-center">
+          <i class="fa fa-credit-card-alt" aria-hidden="true"></i>
+          Thông tin thanh toán
+        </h5>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="rf" *ngIf="rf">
+          <div class="form-group mb-3">
+            <label>Họ và tên:<sup class="text-danger fw-bold">*</sup></label>
+            <input type="text" formControlName="receiverName" class="form-control">
+          </div>
+          <p class="text-danger" *ngIf="rf.controls.receiverName.touched && rf.controls.receiverName.errors?.required">
+            Tên người nhận không thể để trống</p>
+          <p class="text-danger" *ngIf="rf.controls.receiverName.touched && rf.controls.receiverName.errors?.pattern">
+            Tên không chính xác</p>
+          <div class="form-group mb-3">
+            <label>Địa chỉ:<sup class="text-danger fw-bold">*</sup></label>
+            <input type="text" formControlName="receiverAddress" class="form-control">
+          </div>
+          <p class="text-danger"
+             *ngIf="rf.controls.receiverAddress.touched && rf.controls.receiverAddress.errors?.required">Địa chỉ không
+            thể để trống</p>
+          <p class="text-danger"
+             *ngIf="rf.controls.receiverAddress.touched && rf.controls.receiverAddress.errors?.pattern">Địa chỉ không
+            chính xác</p>
+          <div class="form-group mb-3">
+            <label>Số điện thoại:<sup class="text-danger fw-bold">*</sup></label>
+            <input type="text" formControlName="receiverPhone" class="form-control">
+          </div>
+          <p class="text-danger"
+             *ngIf="rf.controls.receiverPhone.touched && rf.controls.receiverPhone.errors?.required">Số điện thoại không
+            thể để trống</p>
+          <p class="text-danger" *ngIf="rf.controls.receiverPhone.touched && rf.controls.receiverPhone.errors?.pattern">
+            Số điện thoại không đúng định dạng</p>
+          <div class="form-group mb-3">
+            <label>Địa chỉ:<sup class="text-danger fw-bold">*</sup></label>
+            <input type="text" formControlName="receiverEmail" class="form-control">
+          </div>
+          <p class="text-danger"
+             *ngIf="rf.controls.receiverEmail.touched && rf.controls.receiverEmail.errors?.required">Email không thể để
+            trống</p>
+          <p class="text-danger" *ngIf="rf.controls.receiverEmail.touched && rf.controls.receiverEmail.errors?.email">
+            Email không đúng định dạng</p>
+          <div class="form-group mb-3">
+            <label for="paymentMethod">Hình thức thanh toán:<sup class="text-danger fw-bold">*</sup></label>
+            <select name="paymentMethod" id="paymentMethod" (change)="changeMethod($event)" class="form-control">
+              <option value="direct" selected>Trực tiếp khi nhận hàng</option>
+              <option value="vnpay">Thanh toán qua VNPay</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="card-footer text-center d-flex flex-column-reverse">
+        <button class="btn btn-secondary" style="margin-top: 10px" (click)="save()" [disabled]="rf.invalid">Quay lại
+        </button>
+        <button class="btn btn-success" (click)="checkout()" [disabled]="rf.invalid||total==0">Thanh toán</button>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-1 text-center">
+  </div>
+</div>
+<br>

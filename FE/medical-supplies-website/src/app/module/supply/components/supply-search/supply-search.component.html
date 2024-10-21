@@ -1,0 +1,102 @@
+<div class="container mt-3">
+  <div id="search-div">
+    <form [formGroup]="supplyForm" (ngSubmit)="search()">
+      <table class="search-table">
+        <tr>
+          <td>
+            <label for="productCode" class="form-label"
+            >Mã vật tư</label
+            >
+          </td>
+          <td>
+            <input
+              type="email"
+              class="input-search"
+              id="productCode"
+              formControlName="productCode"
+            />
+          </td>
+
+          <td>
+            <label for="productName" class="form-label"
+            >Tên vật tư</label
+            >
+          </td>
+          <td>
+            <input
+              type="email"
+              class="input-search"
+              id="productName"
+              formControlName="productName"
+            />
+          </td>
+          <td>
+            <label for="categoryName" class="form-label"
+            >Loại vật tư</label
+            >
+          </td>
+          <td>
+            <input
+              type="email"
+              class="input-search"
+              id="categoryName"
+              formControlName="categoryName"
+            />
+          </td>
+          <td>
+            <button type="button" class="btn btn-success ms-3" routerLink="/products">
+              <i class="fa fa-plus" aria-hidden="true"></i>
+              <span> Thêm mới</span>
+            </button>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label for="customerName" class="form-label"
+            >Nhà cung cấp</label
+            >
+          </td>
+          <td>
+            <input
+              type="email"
+              class="input-search"
+              id="customerName"
+              formControlName="customerName"
+            />
+          </td>
+
+          <td>
+            <label for="beginDate" class="form-label"
+            >Hạn sử dụng:
+            </label>
+          </td>
+          <td>
+            <input
+              type="date"
+              class="input-search"
+              id="beginDate"
+              formControlName="beginDate"
+            />
+          </td>
+          <td class="text-center">
+            <label for="endDate" class="form-label">đến</label>
+          </td>
+          <td>
+            <input
+              type="date"
+              class="input-search"
+              id="endDate"
+              formControlName="endDate"
+            />
+          </td>
+          <td>
+            <button type="submit" class="btn btn-primary ms-3">
+              <i class="fa fa-search" aria-hidden="true"></i>
+              <span> Tìm kiếm</span>
+            </button>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </div>
+</div>

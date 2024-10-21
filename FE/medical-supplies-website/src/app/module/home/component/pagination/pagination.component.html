@@ -1,0 +1,9 @@
+<div class="pagination" *ngIf="totalPages > 1">
+  <a *ngIf="currentPage > 1" (click)="previousPage()" class="fs-16px">«</a>
+  <a class="paginationItem"
+     *ngFor="let page of listOfPage"
+     (click)="accessPage(page)"
+     [class.active]="page === currentPage"
+  >{{page}}</a>
+  <a *ngIf="currentPage < totalPages" (click)="nextPage()" class="fs-16px">»</a>
+</div>

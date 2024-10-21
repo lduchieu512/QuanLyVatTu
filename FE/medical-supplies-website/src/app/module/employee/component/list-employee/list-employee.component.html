@@ -1,0 +1,127 @@
+<section>
+  <div class="container">
+    <h1 style="text-align: center;color: #00B894">Thông tin nhân viên </h1>
+    <form #searchForm="ngForm"
+          (ngSubmit)="search(searchForm.value.nameEmployee,searchForm.value.dateofbirth,searchForm.value.pos)"
+          class="form__filter d-flex">
+      <div class="search-container">
+        <div class="name-em">
+          <div class="lable">
+            <label>Tên nhân viên :</label>
+          </div>
+          <input name="nameEmployee" [(ngModel)]="employeeNameSearch" [value]="" type="text" placeholder="Nhập để tìm kiếm">
+        </div>
+        <div class="date-of-birth">
+          <div class="lable">
+            <label>Ngày sinh :</label>
+          </div>
+          <input [(ngModel)]="dateOfBirth" name="dateofbirth" type="date" placeholder="Ngày sinh">
+        </div>
+        <div class="pos">
+          <div class="lable">
+            <label>Chức vụ :</label>
+          </div>
+          <select [(ngModel)]="posName" name="pos" class="position">
+            <option selected value="">
+              Tất cả
+            </option>
+            <option *ngFor="let pos of positions" [value]="pos.positionName">{{pos.positionName}}</option>
+          </select>
+        </div>
+        <div class="button">
+          <button class="btn btn-primary " type="submit"><i class="fa fa-search"></i>Tìm kiếm</button>
+          <div class="btn-create">
+            <a class="btn btn-success" routerLink="/accounts/create">
+              <i class="fa fa-plus"></i>
+              Thêm mới
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </form>
+    <div class="error" *ngIf="employees.length==0">Danh sách rỗng !!!</div>
+    <div class="row g-4 py-5">
+      <div class="col-md-3" *ngFor="let employee of employees">
+        <div class="product-single-card">
+          <div class="product-top-area">
+            <div class="product-discount" *ngIf="employee.gender==false">
+              <i class="uil uil-venus" title="Nữ"></i>
+            </div>
+            <div class="product-discount" *ngIf="employee.gender==true">
+              <i class="uil uil-mars" title="Nam"></i>
+            </div>
+            <div class="product-img">
+              <div class="first-view">
+                <img *ngIf="employee?.employeeImg" [src]="employee?.employeeImg" alt="logo"
+                     class="img-fluid">
+                <img *ngIf="!employee?.employeeImg" src="assets/images/user-default.png" alt="logo"
+                     class="img-fluid">
+              </div>
+              <div class="hover-view">
+                <img *ngIf="employee?.employeeImg" [src]="employee?.employeeImg" alt="logo"
+                     class="img-fluid">
+                <img *ngIf="!employee?.employeeImg" src="assets/images/user-default.png" alt="logo"
+                     class="img-fluid">
+              </div>
+            </div>
+            <div class="sideicons">
+              <button class="sideicons-btn" (click)="delete(employee.employeeId,employee.employeeName)">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+              <button id="open-modal-button" (click)="getEmployee(employee.employeeId)" class="sideicons-btn">
+                <i class="fa-solid fa-eye"></i>
+              </button>
+              <button class="sideicons-btn" [routerLink]="['update',employee.employeeId]">
+                <i class="fa-solid fa-pen"></i>
+              </button>
+            </div>
+          </div>
+          <div class="product-info">
+            <h6 class="product-category">{{employee.employeeCode}}</h6>
+            <h6 class="product-title text-truncate">{{employee.employeeName}}</h6>
+            <div class="d-flex align-items-center">
+              <div class="review-star me-1">
+              </div>
+              <div style="margin-bottom: -20px;margin-left: -5px;">
+                <p class="review-count">{{employee.dateOfBirth|date: 'dd/MM/yyyy'}}</p>
+              </div>
+            </div>
+            <div class="d-flex flex-wrap align-items-center py-2">
+              <div class="new-price">
+                {{employee.position.positionName}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="modal" [ngClass]="{'modal': true, 'open': isModalOpen}" class="modal">
+  <div style="justify-content: center; margin-top: 10%;" class="modal-content">
+    <span id="close-modal-button" (click)="closeEmployeeModal()" class="close">Thoát</span>
+    <div class="object-details">
+      <img *ngIf="employee?.employeeImg" style="width: 100px;height:auto ;margin-left: 30px;"
+           [src]="employee?.employeeImg" alt="logo"
+           class="img-fluid">
+      <img *ngIf="!employee?.employeeImg" style="width: 100px;height:auto ;margin-left: 30px;"
+           src="assets/images/user-default.png" alt="logo"
+           class="img-fluid">
+      <div class="object-info" style="margin:0px 100px;">
+        <h4 class="object-name">{{employee?.employeeCode}}</h4>
+        <p class="object-description">Tên nhân viên: {{employee?.employeeName}}</p>
+        <p *ngIf="employee?.gender==false" class="object-address">Giới tính: Nữ </p>
+        <p *ngIf="employee?.gender==true" class="object-address">Giới tính: Nam </p>
+        <p class="object-address">Ngày sinh: {{employee?.dateOfBirth|date:'dd/MM/yyyy'}}</p>
+        <p class="object-address">Lương: {{employee?.salary|currency:'VND':'symbol':'1.0-0':'vi'}}</p>
+        <p class="object-address">Tên tài khoản: {{employee?.account?.username}}</p>
+        <p class="object-address">Quê quán: {{employee?.employeeAddress}}</p>
+        <p class="object-address">Số điện thoại: {{employee?.phone}}</p>
+        <p class="object-address">CMND: {{employee?.idCard}}</p>
+        <p class="object-address">Email: {{employee?.email}}</p>
+        <p class="object-address">Chức vụ: {{employee?.position?.positionName}}</p>
+      </div>
+    </div>
+  </div>
+</div>

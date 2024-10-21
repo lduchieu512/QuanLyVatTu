@@ -1,0 +1,151 @@
+<div class="container row p-2 m-auto justify-content-center">
+  <div class="col-12 col-md-12 col-lg-10 rounded mt-4">
+    <div class="row mb-4 justify-content-center">
+      <h2 class="col-12 mb-5 text-center text-mint-leaf">
+        Thông tin tài khoản
+      </h2>
+      <div class="col-12 col-md-4 col-lg-4 mb-4">
+        <div class="justify-content-center d-flex flex-column align-items-center">
+          <div class="position-relative">
+            <div
+              class="mb-3 rounded-circle bg-light border border-2 border-green-blue overflow-hidden d-flex align-items-center justify-content-center"
+              style="width: 200px; height: 200px;">
+              <img *ngIf="employeeUserDetail?.employeeImg" [src]="employeeUserDetail?.employeeImg" style="width: 200px" alt="avatar">
+              <svg *ngIf="!employeeUserDetail?.employeeImg" width="200px" height="200px"
+                   viewBox="-9.36 -9.36 42.72 42.72" fill="none"
+                   xmlns="http://www.w3.org/2000/svg">
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                <g id="SVGRepo_iconCarrier">
+                  <path opacity="0"
+                        d="M17 8C17 10.7614 14.7614 13 12 13C9.23858 13 7 10.7614 7 8C7 5.23858 9.23858 3 12 3C14.7614 3 17 5.23858 17 8Z"
+                        fill="#323232"></path>
+                  <path
+                    d="M17 8C17 10.7614 14.7614 13 12 13C9.23858 13 7 10.7614 7 8C7 5.23858 9.23858 3 12 3C14.7614 3 17 5.23858 17 8Z"
+                    stroke="#323232" stroke-width="0.8160000000000001"></path>
+                  <path d="M3 21C3.95728 17.9237 6.41998 17 12 17C17.58 17 20.0427 17.9237 21 21"
+                        stroke="#323232" stroke-width="0.8160000000000001"
+                        stroke-linecap="round"></path>
+                </g>
+              </svg>
+            </div>
+            <button
+              class="d-none btn btn-update-avatar position-absolute d-inline-flex bg-mint-leaf p-2 rounded-circle border border-green-blue">
+              <i class="fa fa-camera text-light" aria-hidden="true"></i>
+            </button>
+          </div>
+          <div class="text-center">
+            <h5>{{employeeUserDetail?.username}}</h5>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-md-8 col-lg-8">
+        <form [formGroup]="mainForm">
+          <div class="row align-items-center mb-3">
+            <div class="col-auto">
+              <label for="name" class="col-form-label min-w-96">Họ tên:</label>
+            </div>
+            <div class="col-auto flex-grow-1">
+              <input readonly type="text" id="name" class="form-control" formControlName="employeeName">
+            </div>
+          </div>
+
+          <div class="row align-items-center mb-3">
+            <div class="col-auto">
+              <label class="col-form-label min-w-96">Mã nhân viên:</label>
+            </div>
+            <div class="col-auto flex-grow-1">
+              <span>{{employeeUserDetail?.employeeCode}}</span>
+            </div>
+          </div>
+
+          <div class="row align-items-center mb-3">
+            <div class="col-auto">
+              <label class="col-form-label min-w-96">Giới tính:</label>
+            </div>
+            <div class="col-auto">
+              <div class="py-2">
+                <span *ngIf="employeeUserDetail?.gender">Nam</span>
+                <span *ngIf="!employeeUserDetail?.gender">Nữ</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="row align-items-center mb-3">
+            <div class="col-auto">
+              <label for="birthday" class="col-form-label min-w-96">Ngày sinh:</label>
+            </div>
+            <div class="col-auto flex-grow-1">
+              <input readonly type="date" id="birthday" class="form-control" formControlName="dateOfBirth">
+            </div>
+          </div>
+
+          <div class="row align-items-center mb-3">
+            <div class="col-auto">
+              <label for="id-card" class="col-form-label min-w-96">CCCD/CMND:</label>
+            </div>
+            <div class="col-auto flex-grow-1">
+              <input readonly type="text" id="id-card" class="form-control" formControlName="idCard">
+            </div>
+          </div>
+
+          <div class="row align-items-center mb-3">
+            <div class="col-auto">
+              <label for="phone" class="col-form-label min-w-96">Số điện thoại:</label>
+            </div>
+            <div class="col-auto flex-grow-1">
+              <input readonly type="text" id="phone" class="form-control" formControlName="phone">
+            </div>
+          </div>
+
+          <div class="row align-items-center mb-3">
+            <div class="col-auto">
+              <label for="email" class="col-form-label min-w-96">Email:</label>
+            </div>
+            <div class="col-auto d-flex flex-grow-1">
+              <input type="email" readonly id="email" class="form-control" formControlName="accountEmail">
+            </div>
+          </div>
+
+          <div class="row align-items-center mb-3">
+            <div class="col-auto">
+              <label for="address" class="col-form-label min-w-96">Địa chỉ:</label>
+            </div>
+            <div class="col-auto flex-grow-1">
+              <input readonly type="text" id="address" class="form-control" formControlName="employeeAddress">
+            </div>
+          </div>
+
+          <div class="row align-items-center mb-3">
+            <div class="col-auto">
+              <label class="col-form-label min-w-96">Lương (VNĐ):</label>
+            </div>
+            <div class="col-auto flex-grow-1">
+              <span>{{employeeUserDetail?.salary | currency: 'VND'}}</span>
+            </div>
+          </div>
+
+          <div class="row align-items-center mb-3">
+            <div class="col-auto">
+              <label class="col-form-label min-w-96">Chức vụ:</label>
+            </div>
+            <div class="col-auto flex-grow-1">
+              <span>{{employeeUserDetail?.positionName}}</span>
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div
+          class="btn-wrap d-flex flex-column flex-md-row flex-lg-row align-items-md-center align-items-lg-center justify-content-md-end justify-content-lg-end">
+          <button type="button" (click)="showUpdateComponent()"
+                  class=" btn btn-green-blue bg-light-green-blue min-w-96 mb-2">Chỉnh sửa
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

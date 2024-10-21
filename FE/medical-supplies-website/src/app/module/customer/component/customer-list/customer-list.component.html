@@ -1,0 +1,198 @@
+<div class="container col-md-12">
+  <div class="container mt-3" style="position: relative">
+    <div id="search-div">
+      <form [formGroup]="customerForm" (ngSubmit)="searchCustomer()">
+        <table class="search-table">
+          <tr>
+            <td>
+              <label for="customerName" class="form-label"
+              >Tên Khách Hàng :</label
+              >
+            </td>
+            <td>
+              <input
+                type="email"
+                class="input-search"
+                id="customerName"
+                formControlName="customerName"
+              />
+            </td>
+
+            <td>
+              <label for="customerAddress" class="form-label"
+              >Địa Chỉ :</label
+              >
+            </td>
+            <td>
+              <input
+                type="email"
+                class="input-search"
+                id="customerAddress"
+                formControlName="customerAddress"
+              />
+            </td>
+            <td>
+              <button type="button" class="btn btn-success ms-3" (click)="createCustomer()">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+                <span> Thêm mới</span>
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for="customerPhone" class="form-label"
+              >Số điện thoại :</label
+              >
+            </td>
+            <td>
+              <input
+                type="email"
+                class="input-search"
+                id="customerPhone"
+                formControlName="customerPhone"
+              />
+            </td>
+            <td>
+              <label for="customerType" class="form-label"
+              >Loại Khách Hàng :</label
+              >
+            </td>
+            <td>
+              <select class="input-search" id="customerType" formControlName="customerType">
+                <option selected value="">
+                  Chọn Loại Khách Hàng
+                </option>
+                <option *ngFor="let customerType of customerType"
+                        [value]="customerType.customerTypeName">{{customerType.customerTypeName}}</option>
+              </select>
+            </td>
+            <td>
+              <button type="submit" class="btn btn-primary ms-3">
+                <i class="fa fa-search" aria-hidden="true"></i>
+                <span> Tìm kiếm</span>
+              </button>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </div>
+  <br>
+  <h3>Thông tin Khách Hàng</h3>
+  <div>
+    <table class="table border">
+      <caption class="d-none">Danh sách khách hàng</caption>
+      <thead>
+      <tr>
+        <th scope="col" style="color: black ; text-align: center">Mã KH</th>
+        <th scope="col" style="color: black ; text-align: center">Tên Khách Hàng</th>
+        <th scope="col" style="color: black ; text-align: center">Ngày Sinh</th>
+        <th scope="col" style="color: black ; text-align: center">Địa Chỉ</th>
+        <th scope="col" style="color: black ; text-align: center">CCCD</th>
+        <th scope="col" style="color: black ; text-align: center">Số Điện Thoại</th>
+        <th scope="col" style="color: black ; text-align: center">Loại khách hàng</th>
+        <th scope="col" style="color: black ; text-align: center"></th>
+        <th scope="col" style="color: black ; text-align: center"></th>
+        <th scope="col" style="color: black ; text-align: center"></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let customer of customers ; index as i">
+        <td style="text-align: center">{{customer?.customerCode}}</td>
+        <td style="text-align: center">{{customer?.name}}</td>
+        <td style="text-align: center">{{customer?.dateOfBirth |  date:'dd/MM/yyyy' }}</td>
+        <td style="text-align: center">{{customer?.customerAddress}}</td>
+        <td style="text-align: center">{{customer?.idCard}}</td>
+        <td style="text-align: center">{{customer?.phone}}</td>
+        <td style="text-align: center">{{customer?.customerType.customerTypeName}}</td>
+        <td class="d-flex align-items-center justify-content-center">
+          <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modelId"
+                  (click)="getCustomerId(customer.customerId)">
+            <i class="fa fa-trash-o" aria-hidden="true"></i> Xóa
+          </button>
+        </td>
+        <td style="text-align: center">
+          <button type="button" class="btn btn-warning"
+                  (click)="editCustomer(customer.customerId)"
+          ><i class="fa fa-pencil-square-o" aria-hidden="true"></i>Chỉnh sửa
+          </button>
+        </td>
+        <td class="d-flex align-items-center justify-content-center">
+          <button style="background-color: #55efc4" type="button" class="btn btn-info" data-bs-toggle="modal"
+                  data-bs-target="#modelViewId"
+                  (click)="getCustomerId(customer.customerId)">
+            <i class="fa fa-eye" aria-hidden="true"></i>Chi tiết
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <h1><p style="text-align: center" *ngIf="msg">Không có Khách Hàng Nào</p></h1>
+  </div>
+  <div class="pagination">
+    <a *ngIf="page !== 1" (click)="previousPage()" class="text1">«</a>
+    <a class="paginationItem" [class.active]="page===currentPage" (click)="accessPage(page + 1)"
+       *ngFor="let page of totalPages">{{page + 1}}</a>
+    <a *ngIf="page < totalPage" (click)="nextPage()" class="text1">»</a>
+  </div>
+</div>
+
+
+<div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modelTitleId" style="color: red; text-align: center">Xác nhận xóa</h4>
+      </div>
+      <div class="modal-body">
+        <p>Bạn Có Muốn Xóa Khách hàng <span class="fw-bold">{{customer?.name}}</span> không?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Trở về</button>
+        <button type="button" class="btn btn-primary" (click)="deleteCustomer()" data-bs-dismiss="modal">Xóa</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modelViewId" tabindex="-1" role="dialog" aria-labelledby="modelViewCustomerId"
+     aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modelViewCustomerId">Xem Chi tiết Khách hàng</h4>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid" style=" display: flex; align-items: center; margin-top: 10px">
+          <div>
+            <img *ngIf="customer?.customerImg" style="max-width: 300px;max-height: 500px;margin-left: 0px;"
+                 [src]="customer?.customerImg" alt="logo"
+                 class="img-fluid">
+            <img *ngIf="!customer?.customerImg" style="max-width: 300px;max-height: 300px;margin-left: 0px;"
+                 src="assets/images/user-default.png" alt="logo"
+                 class="img-fluid">
+          </div>
+          <div class="object-info" style="margin:20px 25px;">
+            <h4 class="object-name">{{customer?.customerCode}}</h4>
+            <p class="object-description">Tên khách hàng: {{customer?.name}}</p>
+            <p *ngIf="customer?.gender==false" class="object-address">Giới tính: Nữ </p>
+            <p *ngIf="customer?.gender==true" class="object-address">Giới tính: Nam </p>
+            <p class="object-address">Ngày sinh: {{customer?.dateOfBirth|date:'dd/MM/yyyy'}}</p>
+            <p class="object-address">Tên tài khoản: {{customer?.account?.username}}</p>
+            <p class="object-address">Quê quán: {{customer?.customerAddress}}</p>
+            <p class="object-address">Số điện thoại: {{customer?.phone}}</p>
+            <p class="object-address">CMND: {{customer?.idCard}}</p>
+            <p class="object-address">Email: {{customer?.email}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" style="display: flex ; justify-content: center ; text-align: center">
+        <button style="background: #55efc4 ; text-align: center" type="button" class="btn btn-info"
+                data-bs-dismiss="modal">
+          <span style="text-align: center" aria-hidden="true">Quay lại</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

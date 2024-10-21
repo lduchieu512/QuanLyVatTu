@@ -1,0 +1,194 @@
+<div class="container row p-2 m-auto min-w-350 justify-content-center">
+  <form class="row mb-4 justify-content-center" [formGroup]="employeeFormGroup" (ngSubmit)="updateEmployee()">
+    <h2 class="col-12 mb-5 text-center text-md-start text-lg-start text-mint-leaf d-flex justify-content-center">
+      Thông tin cá nhân
+    </h2>
+    <!--img-->
+    <div class="col-12 col-md-4 col-lg-4 mb-4">
+      <div class="justify-content-center d-flex flex-column align-items-center">
+        <div class="position-relative">
+          <div
+            class="mb-3 rounded-circle bg-light border border-2 border-green-blue overflow-hidden d-flex align-items-center justify-content-center"
+            style="width: 200px; height: 200px;">
+            <img  src="{{imgSrc}}" alt="" style="width: 200px">
+          </div>
+        </div>
+        <input class="btn btn-outline-success bg-light-green-blue min-w-120 mb-2" type="file"
+               accept=".jpg,.jpeg,.png,/image/*" #fileUpLoader (change)="selectImg($event)">
+      </div>
+    </div>
+    <!--    <div class="col-8">-->
+    <div class="col-12 col-md-8 col-lg-8">
+      <!--          Họ và tên-->
+      <div class="row mb-3">
+        <div class="col-auto">
+          <label for="employeeName" class="col-form-label min-w-120">Họ tên:<sup
+            class="text-danger fw-bold">*</sup></label>
+        </div>
+        <div class="col-auto flex-grow-1">
+          <input formControlName="employeeName" type="text" id="employeeName" class="form-control"
+                 [ngClass]="employeeFormGroup.controls.employeeName?.invalid?'is-invalid':'is-valid'">
+          <div class=" text-danger p-2 m-0 " role="alert"
+               *ngIf="employeeFormGroup.controls.employeeName?.errors?.required && employeeFormGroup.controls.employeeName?.touched">
+            Không được để trống tên!
+          </div>
+          <div class=" text-danger p-2 m-0 " role="alert"
+               *ngIf="employeeFormGroup.controls.employeeName?.errors?.maxlength && employeeFormGroup.controls.employeeName?.touched">
+            Chiều dài của Họ và tên không dài quá 100 ký tự!
+          </div>
+          <div class=" text-danger p-2 m-0 " role="alert"
+               *ngIf="employeeFormGroup.controls.employeeName?.errors?.minlength && employeeFormGroup.controls.employeeName?.touched">
+            Chiều dài của Họ và tên không ngắn quá 5 ký tự!
+          </div>
+          <div class=" text-danger p-2 m-0 " role="alert"
+               *ngIf="employeeFormGroup.controls.employeeName?.errors?.pattern && employeeFormGroup.controls.employeeName?.touched">
+            Vui lòng nhập đúng định dạng!
+          </div>
+        </div>
+      </div>
+      <!--          Giới tính-->
+      <div class="row align-items-center mb-3">
+        <div class="col-auto">
+          <label class="col-form-label min-w-120">Giới tính:<sup
+            class="text-danger fw-bold">*</sup></label>
+        </div>
+        <div class="col-auto">
+          <div class="form-check form-check-inline">
+            <input formControlName="gender" class="form-check-input form-check-input-checked d-inline" type="radio"
+                   name="gender" id="male" [value]="true">
+            <label class="form-check-label form-check-input-checked d-inline" for="male">Nam</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input formControlName="gender" class="form-check-input form-check-input-checked d-inline" type="radio"
+                   name="gender" id="female" [value]="false">
+            <label class="form-check-label d-inline" for="female">Nữ</label>
+          </div>
+        </div>
+      </div>
+      <!--          Ngày sinh-->
+      <div class="row mb-3">
+        <div class="col-auto">
+          <label for="birthday" class="col-form-label min-w-120">Ngày sinh:<sup
+            class="text-danger fw-bold">*</sup></label>
+        </div>
+        <div class="col-auto flex-grow-1">
+          <input formControlName="dateOfBirth" type="date" id="birthday" class="form-control"
+                 [ngClass]="employeeFormGroup.controls.dateOfBirth?.valid?'is-invalid':'is-valid'">
+          <span class=" text-danger p-2 m-0 " role="alert"
+                *ngIf="employeeFormGroup.controls.dateOfBirth.hasError('isOver18')&&employeeFormGroup.controls.dateOfBirth.dirty">Phải lớn hơn hoặc bằng 18 tuổi</span>
+          <span class=" text-danger p-2 m-0 " role="alert"
+                *ngIf="employeeFormGroup.controls.dateOfBirth.hasError('isOver50')&&employeeFormGroup.controls.dateOfBirth.dirty">Không được lớn hơn 50 tuổi</span>
+          <div class=" text-danger p-2 m-0 " role="alert"
+               *ngIf="employeeFormGroup.controls.dateOfBirth?.errors?.required && employeeFormGroup.controls.dateOfBirth?.touched">
+            Không được để trống ngày sinh!
+          </div>
+          <div class=" text-danger p-2 m-0 " role="alert"
+               *ngIf="employeeFormGroup.controls.dateOfBirth?.errors?.checkAge">
+            Vui lòng nhập đúng định dạng !
+          </div>
+        </div>
+      </div>
+      <!--          Địa chỉ-->
+      <div class="row mb-3">
+        <div class="col-auto">
+          <label for="address" class="col-form-label min-w-120">Địa chỉ:<sup
+            class="text-danger fw-bold">*</sup></label>
+        </div>
+        <div class="col-auto flex-grow-1">
+          <input formControlName="employeeAddress" type="text" id="address" class="form-control"
+                 [ngClass]="employeeFormGroup.controls.employeeAddress?.invalid?'is-invalid':'is-valid'">
+          <div class=" text-danger p-2 m-0 " role="alert"
+               *ngIf="employeeFormGroup.controls.employeeAddress?.errors?.pattern && employeeFormGroup.controls.employeeAddress?.touched">
+            Vui lòng nhập đúng định dạng!
+          </div>
+          <div class=" text-danger p-2 m-0 " role="alert"
+               *ngIf="employeeFormGroup.controls.employeeAddress?.errors?.required && employeeFormGroup.controls?.employeeAddress?.touched">
+            Không được để trống ngày địa chỉ!
+          </div>
+          <div class=" text-danger p-2 m-0 " role="alert"
+               *ngIf="employeeFormGroup.controls.employeeAddress?.errors?.maxlength && employeeFormGroup.controls?.employeeAddress?.touched">
+            Chiều dài của Địa chỉ không dài quá 255 ký tự!
+          </div>
+          <div class=" text-danger p-2 m-0 " role="alert"
+               *ngIf="employeeFormGroup.controls.employeeAddress?.errors?.minlength && employeeFormGroup.controls?.employeeAddress?.touched">
+            Địa chỉ phải nhập đúng định dạng!
+          </div>
+        </div>
+      </div>
+      <!--          Điện thoại-->
+      <div class="row mb-3">
+        <div class="col-auto">
+          <label for="phone" class="col-form-label min-w-120">Điện thoại:<sup
+            class="text-danger fw-bold">*</sup></label>
+        </div>
+        <div class="col-auto flex-grow-1">
+          <input formControlName="phone" type="text" id="phone" class="form-control" (input)="setFlagPhone()"
+                 [ngClass]="employeeFormGroup.controls.phone?.invalid?'is-invalid':'is-valid'">
+          <div class=" text-danger p-2 m-0 " role="alert"
+               *ngIf="employeeFormGroup.controls.phone?.errors?.required && employeeFormGroup.controls.phone?.touched">
+            Không được để trống điện thoại!
+          </div>
+          <div class=" text-danger p-2 m-0 " role="alert"
+               *ngIf="employeeFormGroup.controls.phone?.errors?.pattern && employeeFormGroup.controls?.phone?.touched">
+            Số điện thoại phải đúng định dạng.
+          </div>
+          <div class=" text-danger p-2 m-0 " role="alert"
+               *ngIf="existPhone==true&&!employeeFormGroup.controls.phone.hasError('pattern')&&!employeeFormGroup.controls.phone.hasError('required')">Số điện thoại đã được đăng kí</div>
+        </div>
+      </div>
+      <!--          Email-->
+      <div class="row mb-3">
+        <div class="col-auto">
+          <label for="email" class="col-form-label min-w-120">Email :<sup
+            class="text-danger fw-bold">*</sup></label>
+        </div>
+        <div class="col-auto flex-grow-1">
+          <input formControlName="email" type="email" id="email" class="form-control"
+                 [ngClass]="employeeFormGroup.controls.email?.invalid?'is-invalid':'is-valid'">
+          <div class=" text-danger p-2 m-0 " role="alert"
+               *ngIf="employeeFormGroup.controls.email?.errors?.required && employeeFormGroup.controls.email?.touched">
+            Không được để trống email!
+          </div>
+          <div class=" text-danger p-2 m-0 " role="alert"
+               *ngIf="employeeFormGroup.controls['email'].errors?.email && employeeFormGroup.controls.email?.touched">
+            Email phải đúng định dạng!
+          </div>
+        </div>
+      </div>
+
+
+      <div class="row align-items-center mb-3">
+        <div class="col-auto">
+          <label for="salary" class="col-form-label min-w-120">Lương:</label>
+        </div>
+        <div class="col-auto flex-grow-1">
+          <input formControlName="salary" type="number" disabled id="salary" class="form-control">
+        </div>
+      </div>
+      <div class="row align-items-center mb-3">
+        <div class="col-auto">
+          <label for="position" class="col-form-label min-w-120">Chức vụ:</label>
+        </div>
+        <div class="col-auto flex-grow-1">
+          <input formControlName="positionName" type="text" disabled id="position" class="form-control">
+        </div>
+      </div>
+
+    </div>
+    <!--    </div>-->
+    <div class="row">
+      <div class="col-lg-12">
+        <div
+          class="btn-wrap d-flex flex-column flex-md-row flex-lg-row align-items-md-center align-items-lg-center justify-content-md-end justify-content-lg-end">
+
+          <app-modal-change-password></app-modal-change-password>
+          <button type="button" routerLink="/employees/detail" class="btn btn-outline-danger bg-light-green-blue min-w-120 mb-2 me-md-4 me-lg-4">Hủy
+            bỏ
+          </button>
+          <button type="submit" class="btn btn-outline-success bg-light-green-blue min-w-120 mb-2">Lưu</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+

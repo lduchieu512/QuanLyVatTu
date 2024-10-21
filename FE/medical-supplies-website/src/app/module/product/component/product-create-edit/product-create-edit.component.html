@@ -1,0 +1,99 @@
+<!-- Thêm mới vật tư-->
+
+<div class="container" >
+  <div class="row justify-content-center mt-4" >
+    <h2 style="text-align: center; margin-top: 10px">Thêm mới vật tư</h2>
+    <div class="col-lg-12">
+      <div class="form-group col-md-12 avatar" style="background-color: #00B894 ; border-radius: 20px">
+        <img style="max-width: 200px; max-height: 200px; border-radius: 10px; margin: 5px 0 5px 0"  width="200" height="200" [src]="oldAvatarLink">
+      </div>
+
+      <form class="row" [formGroup]="formGroup" (ngSubmit)="submitProduct()">
+
+        <!--        <div class="form-group col-md-6" style="margin-top: 10px">-->
+        <!--          <label class="form-label" >Mã vật tư</label><span>*</span>-->
+        <!--          <input type="text" class="form-control"  placeholder="Mã vật tư" formControlName="productCode" readonly>-->
+        <!--          <span style="color: red" *ngIf="formGroup.controls.productCode?.touched && formGroup.controls.productCode?.errors?.required && !formGroup.controls.productCode?.valid ">Mã vật tư không được để trống.</span>-->
+        <!--          <span style="color: red" *ngIf="formGroup.controls.productCode?.touched && formGroup.controls.productCode?.errors?.minLength && !formGroup.controls.productCode?.valid">Mã vật tư không được nhở hơn 3 ký tự.</span>-->
+        <!--        </div>-->
+
+        <div class="form-group col-md-6">
+          <label class="form-label" for="image" class="form-label">Hình ảnh </label><span style="color: red">*</span>
+          <input type="file" class="form-control" id="image" name="image"  accept="image/png, image/jpeg"
+                 (change)="changeFile($event)"
+                 placeholder="Chọn hình ảnh"
+                 formControlName="productImg">
+          <span style="color: red" *ngIf="formGroup.controls.productImg?.touched && formGroup.controls.productImg?.errors?.required">Hình ảnh không được để trống.</span>
+          <span style="color: red" *ngIf="formGroup.controls.productImg?.dirty && !formGroup.controls.productImg?.valid">Hình ảnh không đúng định dạng (jpg,png).</span>
+        </div>
+
+        <div class="form-group col-md-6" style="margin-top: 10px">
+          <label class="form-label" for="Ten">Tên vật tư</label><span style="color: red">*</span>
+          <input type="text" class="form-control" id="Ten" placeholder="Tên vật tư" formControlName="productName">
+          <span style="color: red" *ngIf="formGroup.controls.productName?.touched && formGroup.controls.productName?.errors?.required">Tên vật tư không được để trống.</span>
+          <span style="color: red" *ngIf="(formGroup.controls.productName?.touched && !formGroup.controls.productName?.valid) && formGroup.controls.productName?.errors?.minlength">Tên vật tư ít nhất 3 ký tự.</span>
+          <span style="color: red" *ngIf="(formGroup.controls.productName?.touched && !formGroup.controls.productName?.valid) && formGroup.controls.productName?.errors?.maxLength">Tên vật tư không được quá 45 ký tự.</span>
+          <!--          <span style="color: red" *ngIf="(formGroup.controls.productName.touched ||formGroup.controls.productName.dirty) && formGroup.controls.productName?.errors?.pattern">Tên vật tư không được chứa ký tự đặc biệt.</span>-->
+        </div>
+
+        <div class="form-group col-md-6">
+          <label for="loaiVatTu" class="form-label"  class="form-label">Loại vật tư</label><span style="color: red">*</span>
+          <select id="loaiVatTu" class="form-select" formControlName="category">
+            <option selected disabled value="">Chọn loại vật tư</option>
+            <option *ngFor="let item of category" value="{{item.categoryId}}" >{{item.categoryName}}</option>
+          </select>
+          <span style="color: red" *ngIf="(formGroup.controls.category?.touched || formGroup.controls.category?.dirty) && formGroup.controls.category?.errors?.required">Loại vật tư không được bỏ trống</span>
+        </div>
+
+        <div class="form-group col-md-6">
+          <label for="supplier" class="form-label"  class="form-label">Nhà cung cấp</label><span style="color: red">*</span>
+          <select id="supplier" class="form-select" formControlName="customer">
+            <option selected disabled value="">Chọn nhà cung cấp</option>
+            <option *ngFor="let item of customer"  value="{{item.customerId}}">{{item.name}}</option>
+          </select>
+          <span style="color: red" *ngIf="(formGroup.controls.customer?.touched || formGroup.controls.customer?.dirty) && formGroup.controls.customer?.errors?.required && !formGroup.controls.customer?.valid">Nhà cung cấp không được bổ trống</span>
+        </div>
+
+        <div class="form-group col-md-6" style="margin-top: 10px">
+          <label class="form-label" for="price" >Giá({{price | currency:"VND":true}})</label><span style="color: red">*</span>
+          <input [(ngModel)]="price" type="number" class="form-control" id="price" placeholder="Giá" formControlName="productPrice">
+          <span style="color: red" *ngIf="(formGroup.controls.productPrice?.touched || formGroup.controls.productPrice?.dirty) && formGroup.controls.productPrice?.errors?.required">Giá không được bỏ trống</span>
+          <span style="color: red" *ngIf="(formGroup.controls.productPrice?.touched && !formGroup.controls.productPrice?.valid) && formGroup.controls.productPrice?.errors?.min">Giá không được nhỏ hơn 1 VNĐ.</span>
+          <span style="color: red" *ngIf="(formGroup.controls.productPrice?.touched && !formGroup.controls.productPrice?.valid) && formGroup.controls.productPrice?.errors?.max">Giá không được lớn hơn 1000000000 VNĐ</span>
+        </div>
+
+        <div class="form-group col-md-6" style="margin-top: 10px">
+          <label class="form-label" for="hansudung" >Hạn sử dụng</label><span style="color: red">*</span>
+          <input type="date" class="form-control" id="hansudung" formControlName="expireDate">
+          <span style="color: red" *ngIf="(formGroup.controls.expireDate?.touched || formGroup.controls.expireDate?.dirty) && formGroup.controls.expireDate?.errors?.required ">Hạn sử dụng không được bỏ trống</span>
+        </div>
+
+        <div class="form-group col-md-6" style="margin-top: 10px">
+          <label class="form-label" for="soluong">Số lượng(Thùng)</label><span style="color: red">*</span>
+          <input type="number" class="form-control" id="soluong" placeholder="Số lượng" formControlName="productQuantity">
+          <span style="color: red" *ngIf="(formGroup.controls.productQuantity?.touched || formGroup.controls.productQuantity?.dirty) && formGroup.controls.productQuantity?.errors?.required">Số Lượng không được bỏ trống.</span>
+          <span style="color: red" *ngIf="(formGroup.controls.productQuantity?.touched && !formGroup.controls.productQuantity?.valid) && formGroup.controls.productQuantity?.errors?.min">Số Lượng không được nhở hơn 1.</span>
+          <span style="color: red" *ngIf="(formGroup.controls.productQuantity?.touched && !formGroup.controls.productQuantity?.valid) && formGroup.controls.productQuantity?.errors?.max">Số Lượng không được lớn hơn 10000.</span>
+        </div>
+
+
+        <!--        <div class="form-group col-md-6">-->
+        <!--          <label class="form-label" for="detail">Thông tin chi tiết vật tư</label><span>*</span>-->
+        <!--          <select name="" id="detail" class="form-select" formControlName="productInfo">-->
+        <!--            <option selected disabled value="">Thông tin chi tiết</option>-->
+        <!--            <option *ngFor="let item of productInfo" value="{{item.infoId}}">{{item.infoIntroduction}}</option>-->
+        <!--          </select>-->
+        <!--          <span style="color: red" *ngIf="formGroup.controls.productInfo?.touched && !formGroup.controls.productInfo?.valid">thông tin chi tiết không được bỏ trống</span>-->
+        <!--        </div>-->
+
+
+        <div class="form-group cssButton">
+          <button type="reset" class="btn btn-outline-danger" routerLink="/supplies">Hủy bỏ</button>
+          <button type="submit" class="btn btn-outline-success mx-2">
+            Thêm mới
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

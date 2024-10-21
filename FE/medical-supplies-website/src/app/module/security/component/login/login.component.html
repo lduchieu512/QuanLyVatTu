@@ -1,0 +1,68 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="panel col-sm-12 col-md-6 col-lg-6">
+      <div class="row">
+        <h3>Bạn cần giúp đỡ ?</h3>
+        <p class="">
+          Hãy liên hệ ngay với chúng tôi để được tư vấn miễn phí!
+        </p>
+      </div>
+      <img src="assets/img/login.svg" class="image" alt=""/>
+    </div>
+
+    <div class="form-container col-sm-12 col-md-6 col-lg-6">
+      <form class="mt-5 pt-5" [formGroup]="formLogin" (ngSubmit)="onSubmit()">
+        <h2 class="title">Đăng nhập</h2>
+        <div class="input-field">
+          <i class="fas fa-user"></i>
+          <input type="text" name="user" placeholder="Tài khoản" formControlName="username"/>
+        </div>
+        <span class="text-danger"
+              *ngIf="formLogin.controls.username?.touched
+               && formLogin.controls.username?.errors?.required">Bạn cần nhập thông tin này
+        </span>
+        <span class="text-danger"
+              *ngIf="formLogin.controls.username?.errors?.pattern">Tài khoản không đúng định dạng
+        </span>
+        <span class="text-danger"
+              *ngIf="formLogin.controls.password?.errors?.maxlength">Mật khẩu quá dài
+        </span>
+        <div class="input-field"
+             *ngIf="!showPassword">
+          <i class="fa fa-eye" (click)="togglePasswordVisibility()"></i>
+          <input type="password" name="pass" placeholder="Mật khẩu" formControlName="password"/>
+        </div>
+        <div class="input-field"
+             *ngIf="showPassword">
+          <i class="fa fa-eye-slash" (click)="togglePasswordVisibility()"></i>
+          <input type="text" name="pass" placeholder="Mật khẩu" formControlName="password"/>
+        </div>
+        <span class="text-danger"
+              *ngIf="formLogin.controls.password?.touched
+               && formLogin.controls.password?.errors?.required">Bạn cần nhập thông tin này
+        </span>
+        <span class="text-danger"
+              *ngIf="formLogin.controls.username?.errors?.pattern">Tài khoản không đúng định dạng
+        </span>
+        <span class="text-danger"
+              *ngIf="formLogin.controls.password?.errors?.maxlength">Mật khẩu quá dài
+        </span>
+        <div>
+          <input class="form-check-input align-middle me-2" type="checkbox" id="disabledFieldsetCheck"
+                 formControlName="remember_me">
+          <label class="form-check-label align-middle" for="disabledFieldsetCheck">
+            Nhớ tài khoản
+          </label>
+        </div>
+        <input type="submit" value="Đăng nhập" class="btn btn-customize"/>
+        <span *ngIf="message != null" class="text-danger">{{message}}</span>
+        <span class="text-danger"
+              *ngIf="formLogin.controls.username?.errors?.pattern">Tài khoản không đúng định dạng
+        </span>
+        <span class="text-danger"
+              *ngIf="formLogin.controls.password?.errors?.maxlength">Mật khẩu quá dài
+        </span>
+      </form>
+    </div>
+  </div>
+</div>

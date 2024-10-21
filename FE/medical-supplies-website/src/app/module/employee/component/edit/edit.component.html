@@ -1,0 +1,112 @@
+<div class="container">
+  <div class="row main-create justify-content-center mt-4">
+    <h2 style="text-align: center; margin-top: 10px">Chỉnh Sửa Nhân Viên</h2>
+    <div class="col-lg-12">
+
+      <div class="form-group col-md-12 avatar">
+        <img alt="" style="width: 200px; height: 200px; border-radius: 50%;" src="{{imgSrc}}">
+      </div>
+
+      <form [formGroup]="employeeEditForm" (ngSubmit)="updateEmployee()" *ngIf="positions&&employeeEdit" CLASS="row">
+
+        <div class="form-group col-md-6" style="margin-top: 10px">
+          <label class="form-label" >Mã nhân viên</label><span>*</span>
+          <input formControlName = "employeeCode" type="text" class="form-control" disabled id="employeeCode">
+        </div>
+
+        <div class="form-group col-md-6" style="margin-top: 10px">
+          <label class="form-label" for="hoTen">Họ tên</label><span>*</span>
+          <input formControlName = "employeeName" type="text" class="form-control" id="hoTen" placeholder="Họ và tên">
+          <span *ngIf="employeeEditForm.controls.employeeName.hasError('required')&&employeeEditForm.controls.employeeName.dirty">(Vui lòng nhập họ tên)</span>
+          <span *ngIf="employeeEditForm.controls.employeeName.hasError('minlength')&&employeeEditForm.controls.employeeName.dirty">(Chứa ít nhất 3 kí tự)</span>
+          <span *ngIf="employeeEditForm.controls.employeeName.hasError('maxlength')&&employeeEditForm.controls.employeeName.dirty">(Chứa tối đa 50 kí tự)</span>
+          <span
+            *ngIf="employeeEditForm.controls.employeeName.hasError('pattern')
+            &&employeeEditForm.controls.employeeName.dirty&&!employeeEditForm.controls.employeeName.hasError('minlength')
+            &&!employeeEditForm.controls.employeeName.hasError('maxlength')">(Họ và tên chưa đúng định dạng)</span>
+        </div>
+
+        <div class="form-group col-md-6" style="margin-top: 10px">
+          <label class="form-label" for="ngaySinh">Ngày sinh</label><span>*</span>
+          <input formControlName = "dateOfBirth" type="date" class="form-control" id="ngaySinh">
+          <span
+            *ngIf="employeeEditForm.controls.dateOfBirth.hasError('required')&&employeeEditForm.controls.dateOfBirth.dirty">(Vui lòng chọn ngày sinh)</span>
+          <span
+            *ngIf="employeeEditForm.controls.dateOfBirth.hasError('isOver18')&&employeeEditForm.controls.dateOfBirth.dirty">(Phải lớn hơn hoặc bằng 18 tuổi)</span>
+          <span
+            *ngIf="employeeEditForm.controls.dateOfBirth.hasError('isOver50')&&employeeEditForm.controls.dateOfBirth.dirty">(Không được lớn hơn 50 tuổi)</span>
+        </div>
+
+        <div id="gioiTinh" class="form-group col-md-6">
+          <label class="form-label" for="gioiTinh">Giới tính</label><span>*</span><br>
+
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" formControlName = "gender" id="gioiTinhNam" value="true" [checked]="employeeEdit.gender == true">
+            <label class="form-check-label" for="gioiTinhNam">Nam</label>
+          </div>
+
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" formControlName = "gender" id="gioiTinhNu" value="false" [checked]="employeeEdit.gender == false">
+            <label class="form-check-label" for="gioiTinhNu">Nữ</label>
+          </div>
+        </div>
+
+
+        <div class="form-group col-md-6">
+          <label class="form-label" for="email">Email</label><span>*</span>
+          <input type="email" formControlName = "email" class="form-control" id="email" placeholder="Email" (input)="setFlagEmail()">
+          <span *ngIf="employeeEditForm.controls.email.hasError('required')&&employeeEditForm.controls.email.dirty">(Vui lòng nhập email)</span>
+          <span *ngIf="employeeEditForm.controls.email.hasError('minlength')&&employeeEditForm.controls.email.dirty">(Chứa ít nhất 6 kí tự)</span>
+          <span *ngIf="employeeEditForm.controls.email.hasError('maxlength')&&employeeEditForm.controls.email.dirty">(Chứa tối đa 50 kí tự)</span>
+          <span
+            *ngIf="employeeEditForm.controls.email.hasError('pattern')&&employeeEditForm.controls.email.dirty&&!employeeEditForm.controls.email.hasError('minlength')&&!employeeEditForm.controls.email.hasError('maxlength')">(Email chưa đúng định dạng)</span>
+          <span
+            *ngIf="existEmail==true&&!employeeEditForm.controls.email.hasError('required')&&!employeeEditForm.controls.email.hasError('minlength')&&!employeeEditForm.controls.email.hasError('pattern')&&!employeeEditForm.controls.email.hasError('maxlength')">(Email đã được đăng kí)</span>
+        </div>
+
+        <div class="form-group col-md-6">
+          <label for="chucVu" class="form-label"  class="form-label">Chức vụ</label><span>*</span>
+          <select formControlName = "position" id="chucVu" class="form-select" [compareWith]="compareFn">
+            <option *ngFor="let position of positions" [ngValue]="position">{{position.positionName}}</option>
+          </select>
+        </div>
+
+        <div class="form-group col-md-6">
+          <label class="form-label" for="sdt">Số điện thoại</label><span>*</span>
+          <input type="tel" class="form-control" formControlName = "phone" id="sdt" placeholder="Số điện thoại" (input)="setFlagPhone()">
+          <span *ngIf="employeeEditForm.controls.phone.hasError('required')&&employeeEditForm.controls.phone.dirty">(Vui lòng nhập số điện thoại)</span>
+          <span *ngIf="employeeEditForm.controls.phone.hasError('pattern')&&employeeEditForm.controls.phone.dirty">(Chỉ được phép chứa 10 số và bắt đầu 09 hoặc 08)</span>
+          <span
+            *ngIf="existPhone==true&&!employeeEditForm.controls.phone.hasError('pattern')&&!employeeEditForm.controls.phone.hasError('required')">(Số điện thoại đã được đăng kí)</span>
+        </div>
+
+        <div class="form-group col-md-6">
+          <label class="form-label" for="cmnd">CMND/Hộ chiếu</label><span>*</span>
+          <input type="text" class="form-control" formControlName = "idCard" id="cmnd" placeholder="CMND/Hộ chiếu" (input)="setFlagIdCard()">
+          <span *ngIf="employeeEditForm.controls.idCard.hasError('required')&&employeeEditForm.controls.idCard.dirty">(Vui lòng nhập hộ chiếu/CMND)</span>
+          <span *ngIf="employeeEditForm.controls.idCard.hasError('pattern')&&employeeEditForm.controls.idCard.dirty">(Chỉ được phép chứa 12)</span>
+          <span
+            *ngIf="existIdCard==true&&!employeeEditForm.controls.idCard.hasError('required')&&!employeeEditForm.controls.idCard.hasError('pattern')">(Hộ chiếu/CMND đã được đăng kí)</span>
+        </div>
+
+        <div class="form-group col-md-6">
+          <label for="avatar" class="form-label">Hình đại diện</label><span>*</span>
+          <input type="file" class="form-control" id="avatar" accept=".jpg,.jpeg,.png,/image/*" (change)="selectImg($event)">
+          <span *ngIf="maxSize==true">(Ảnh phải bé hơn 1MB)</span>
+        </div>
+
+        <div class="form-group col-md-6">
+          <label class="form-label" for="diaChi">Địa chỉ</label><span>*</span>
+          <input type="text" formControlName = "employeeAddress" class="form-control" id="diaChi" placeholder="Địa chỉ">
+          <span *ngIf="employeeEditForm.controls.employeeAddress.hasError('required')&&employeeEditForm.controls.employeeAddress.dirty">(Vui lòng nhập địa chỉ)</span>
+          <span *ngIf="employeeEditForm.controls.employeeAddress.hasError('maxlength')&&employeeEditForm.controls.employeeAddress.dirty">(Chứa tối đa 50 kí tự)</span>
+        </div>
+
+        <div class="form-group">
+          <button routerLink="/employees" class="btn btn-secondary">Hủy</button>
+          <button type="submit" class="btn btn-success mx-2">Lưu</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
